@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "generate-key": "node index.js",
     "test": "mocha"
   },
   "keywords": [],
