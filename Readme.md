@@ -25,7 +25,7 @@ You need to have Node.js installed on your computer
 
 To run the application, use the following command:
 
-`npm generate-key`
+`npm run generate-key`
 
 This will start the CLI app and prompt you for your username, password, and PIN. After entering your details, the app will display your private key and mnemonic.
 
