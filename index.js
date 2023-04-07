@@ -5,9 +5,9 @@
 
 import inquirer from "inquirer";
 import chalk from "chalk";
-import fs from "fs";
 import { keccak256 } from "ethereumjs-util";
 import * as bip39 from "bip39";
+import clipboardy from "clipboardy";
 
 // Define the questions for the user input prompt.
 const questions = [
@@ -29,6 +29,16 @@ const questions = [
     mask: "*",
   },
 ];
+
+async function copyToClipboard(option, privateKey, mnemonic) {
+  if (option === "Private key") {
+    await clipboardy.write(privateKey);
+    console.log(chalk.green("Private key copied to clipboard!"));
+  } else {
+    await clipboardy.write(mnemonic);
+    console.log(chalk.green("Mnemonic copied to clipboard!"));
+  }
+}
 
 // Generate the private key from the user input.
 export function generatePrivateKeyFromInput(input) {
@@ -55,11 +65,11 @@ export function generateValues(username, password, pin) {
 }
 
 // Main function to prompt user input, generate values, and display them.
-function run() {
+async function run() {
   console.clear();
   console.log(chalk.yellow.bold("Welcome to YourVault CLI version!"));
 
-  inquirer.prompt(questions).then((answers) => {
+  inquirer.prompt(questions).then(async (answers) => {
     console.log(chalk.green.bold("Thank you for your input!"));
 
     const { privateKey, mnemonic } = generateValues(
@@ -68,28 +78,25 @@ function run() {
       answers.pin
     );
 
-    console.log(chalk.cyan.bold("Your private key:"));
-    console.log(chalk.cyan(privateKey));
-    console.log(chalk.cyan.bold("Your mnemonic:"));
-    console.log(chalk.cyan(mnemonic));
-
-    inquirer
-      .prompt([
+    let continueCopying = true;
+    while (continueCopying) {
+      const { option } = await inquirer.prompt([
         {
-          type: "confirm",
-          name: "continue",
-          message: "Do you want to continue?",
-          default: true,
+          type: "rawlist",
+          name: "option",
+          message: "Select the value you want to copy:",
+          choices: ["Private key", "Mnemonic", "Exit"],
         },
-      ])
-      .then((continueAnswer) => {
-        if (continueAnswer.continue) {
-          run();
-        }
-      });
+      ]);
+
+      if (option === "Exit") {
+        continueCopying = false;
+      } else {
+        await copyToClipboard(option, privateKey, mnemonic);
+      }
+    }
   });
 }
-
 // Run the main function if this script is executed directly.
 try {
   if (import.meta.url === `file://${process.argv[1]}`) {
