@@ -4,6 +4,9 @@ import {
   generatePrivateKeyFromInput,
   privateKeyToMnemonic,
 } from "../index.js";
+import { copyToClipboard } from "../index.js";
+import sinon from "sinon";
+import clipboardy from "clipboardy";
 
 describe("generateValues function", () => {
   it("should generate the same private key and mnemonic for the same input", () => {
@@ -287,5 +290,37 @@ describe("generateValues function", () => {
       "emerge neutral sibling advance recycle boy process leave echo mushroom road camp strategy kind pumpkin warm mammal result order initial mammal record fun roof";
     const actualOutput = privateKeyToMnemonic(privateKey);
     expect(actualOutput).to.equal(expectedOutput);
+  });
+});
+
+describe("copyToClipboard function", () => {
+  afterEach(() => {
+    sinon.restore();
+  });
+
+  it("should copy the private key to clipboard", async () => {
+    const clipboardWriteStub = sinon.stub(clipboardy, "write");
+    const option = "Private key";
+    const privateKey =
+      "0x48b29f1e81fb3e356ae3f745f23aeb906d6cf52b6fb986b6fa70b9f86b679785";
+    const mnemonic =
+      "emerge neutral sibling advance recycle boy process leave echo mushroom road camp strategy kind pumpkin warm mammal result order initial mammal record fun roof";
+
+    await copyToClipboard(option, privateKey, mnemonic, clipboardy);
+
+    expect(clipboardWriteStub.calledOnceWith(privateKey)).to.be.true;
+  });
+
+  it("should copy the mnemonic to clipboard", async () => {
+    const clipboardWriteStub = sinon.stub(clipboardy, "write");
+    const option = "Mnemonic";
+    const privateKey =
+      "0x48b29f1e81fb3e356ae3f745f23aeb906d6cf52b6fb986b6fa70b9f86b679785";
+    const mnemonic =
+      "emerge neutral sibling advance recycle boy process leave echo mushroom road camp strategy kind pumpkin warm mammal result order initial mammal record fun roof";
+
+    await copyToClipboard(option, privateKey, mnemonic, clipboardy);
+
+    expect(clipboardWriteStub.calledOnceWith(mnemonic)).to.be.true;
   });
 });

@@ -30,12 +30,17 @@ const questions = [
   },
 ];
 
-async function copyToClipboard(option, privateKey, mnemonic) {
+export async function copyToClipboard(
+  option,
+  privateKey,
+  mnemonic,
+  clipboardModule
+) {
   if (option === "Private key") {
-    await clipboardy.write(privateKey);
+    await clipboardModule.write(privateKey);
     console.log(chalk.green("Private key copied to clipboard!"));
   } else {
-    await clipboardy.write(mnemonic);
+    await clipboardModule.write(mnemonic);
     console.log(chalk.green("Mnemonic copied to clipboard!"));
   }
 }
@@ -92,7 +97,7 @@ async function run() {
       if (option === "Exit") {
         continueCopying = false;
       } else {
-        await copyToClipboard(option, privateKey, mnemonic);
+        await copyToClipboard(option, privateKey, mnemonic, clipboardy); // Asegúrate de pasar clipboardy aquí
       }
     }
   });
