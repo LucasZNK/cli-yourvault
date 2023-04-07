@@ -2,9 +2,7 @@
 
 CLI YourVault is a command line interface tool that helps users generate a private key and mnemonic for Ethereum wallets based on their username, password, and PIN. It is a lightweight, easy-to-use application that utilizes the ethereumjs-util, bip39, and other useful libraries.
 
-
-https://user-images.githubusercontent.com/57494138/230527067-7be9862d-a867-4cc4-8540-a80edaf6b86c.mp4
-
+https://user-images.githubusercontent.com/57494138/230528802-a589cccf-e6ed-4571-8202-3f3691243c8a.mp4
 
 ## Motivation:
 The goal of creating this CLI application is to allow users to generate deterministic private keys and mnemonic phrases using a combination of their username, password, and a PIN. This offers a secure and easy-to-remember way to store and access their private keys across different blockchain networks such as Ethereum, Matic, Binance Smart Chain, and others, without the need to physically or digitally store them.
